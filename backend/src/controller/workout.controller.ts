@@ -1,11 +1,25 @@
-const getWorkouts = () => { }
+import { Request, Response } from "express"
 
-const getWorkoutById = () => { }
+export const getAll = (req: Request, res: Response) => {
+  return res.json({ controller: true })
+}
 
-const postWorkouts = () => { }
+export const getById = (req: Request, res: Response) => {
 
-const deleteWorkouts = () => { }
+}
 
-const deleteWorkoutById = () => { }
+export const createOne = (req: Request, res: Response) => {
 
-const pathWorkout = () => { }
+}
+
+export const deleteAll = (req: Request, res: Response) => {
+
+}
+
+export const deleteById = (req: Request, res: Response) => {
+
+}
+
+export const editOne = (req: Request, res: Response) => {
+
+}

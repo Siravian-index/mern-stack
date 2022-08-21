@@ -8,7 +8,7 @@ const app = express()
 app.use(express.json())
 
 // custom routes
-app.use(workoutRouter)
+app.use('/api/workout', workoutRouter)
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on ${process.env.PORT}`);
