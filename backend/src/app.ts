@@ -1,14 +1,19 @@
-import express, { Express, Response, Request } from 'express'
+import 'dotenv/config'
+import express, { Response, Request } from 'express'
+import connectToDB from './db/config'
 
-const app: Express = express()
+import workoutRouter from './routes/workout.routes'
 
-app.use(express.json())
+const main = async () => {
+  const app = express()
 
-app.get('/', (req: Request, res: Response) => {
-  return res.json({ test: 'hi' })
-})
+  app.use(express.json())
 
+  // custom routes
+  app.use('/api/workout', workoutRouter)
 
-app.listen(3000, () => {
-  console.log("listening on port 3000");
-})
+  await connectToDB(app)
+}
+
+main()
+
