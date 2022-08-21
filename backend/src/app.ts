@@ -2,7 +2,7 @@ import 'dotenv/config'
 import express, { Express, Response, Request } from 'express'
 
 
-const app: Express = express()
+const app = express()
 
 app.use(express.json())
 
