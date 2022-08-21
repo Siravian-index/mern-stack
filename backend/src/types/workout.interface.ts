@@ -1,5 +1,5 @@
 export interface IWorkout {
-  name: string
-  intensity: number
-  level: string
+  title: string
+  reps: number
+  load: number
 }

@@ -1,5 +1,5 @@
-import * as Workout from './workout.interface'
+import { IWorkout } from './workout.interface'
 
 export {
-  Workout
+  IWorkout
 }
