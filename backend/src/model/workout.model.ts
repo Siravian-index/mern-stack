@@ -16,8 +16,8 @@ const workoutSchema = new Schema<IWorkout>({
   }
 })
 
-const workoutModel = model('Workout', workoutSchema)
+const WorkoutModel = model('Workout', workoutSchema)
 
 export {
-  workoutModel
+  WorkoutModel
 }
