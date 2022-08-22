@@ -57,12 +57,21 @@ export const deleteById = async (req: Request, res: Response) => {
   }
 }
 
-export const editOne = (req: Request, res: Response) => {
+export const editOne = async (req: Request, res: Response) => {
   const { id } = req.params
+  const paramsToUpdate = req.body
+
   if (!isValidId(id)) {
     return res.status(400).json(Errors.notFound('Workout'))
   }
 
-  // pending
-  // WorkoutModel.findByIdAndUpdate(id)
+  try {
+    const workout = await WorkoutModel.findOneAndUpdate({ _id: id }, { ...paramsToUpdate }, { new: true })
+    if (!workout) {
+      return res.status(404).json(Errors.notFound(`Workout ${id}`))
+    }
+    return res.status(200).json(workout)
+  } catch (error) {
+    return res.status(400).json({ error })
+  }
 }
