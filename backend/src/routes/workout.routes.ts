@@ -10,7 +10,7 @@ router.get('/:id', getById)
 
 router.post('/', createOne)
 
-router.patch('/', editOne)
+router.patch('/:id', editOne)
 
 router.delete('/', deleteAll)
 
