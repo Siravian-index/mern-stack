@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { workoutModel } from "../model/workout.model"
+import { WorkoutModel } from "../model/workout.model"
 import { IWorkout } from "../types"
 
 export const getAll = (req: Request, res: Response) => {
@@ -14,7 +14,7 @@ export const getById = (req: Request, res: Response) => {
 export const createOne = async (req: Request<{}, {}, IWorkout>, res: Response) => {
   const { title, reps, load } = req.body
   try {
-    const workout = await workoutModel.create({ title, reps, load })
+    const workout = await WorkoutModel.create({ title, reps, load })
     return res.status(201).json(workout)
   } catch ({ message }) {
     return res.status(400).json({ error: message })
