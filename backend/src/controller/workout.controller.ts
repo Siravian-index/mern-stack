@@ -66,7 +66,7 @@ export const editOne = async (req: Request, res: Response) => {
   }
 
   try {
-    const workout = await WorkoutModel.findOneAndUpdate({ _id: id }, { ...paramsToUpdate }, { new: true })
+    const workout = await WorkoutModel.findByIdAndUpdate(id, { ...paramsToUpdate }, { new: true })
     if (!workout) {
       return res.status(404).json(Errors.notFound(`Workout ${id}`))
     }
