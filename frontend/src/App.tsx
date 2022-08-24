@@ -1,10 +1,11 @@
-import AppRoutes from "./routes/AppRoutes"
+import WorkoutRoutes from "./routes/WorkoutRoutes"
 
 function App() {
 
   return (
     <div className="App">
-      <AppRoutes />
+
+      <WorkoutRoutes />
     </div>
   )
 }

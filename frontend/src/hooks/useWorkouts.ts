@@ -6,6 +6,7 @@ export const useWorkouts = () => {
 
   const [workouts, setWorkouts] = useState<IWorkout[]>([]);
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false);
 
   const addWorkout = (workout: IWorkout) => {
     // setWorkouts((prev) => [...prev, workout])
@@ -18,6 +19,7 @@ export const useWorkouts = () => {
   }
   const loadWorkouts = async () => {
     try {
+      setLoading(true)
       const response = await fetch(ENDPOINT)
       if (response.ok) {
         const json = await response.json() as IWorkout[]
@@ -25,6 +27,8 @@ export const useWorkouts = () => {
       }
     } catch (error) {
       setError('Something went wrong while fetching workouts')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -32,5 +36,5 @@ export const useWorkouts = () => {
     loadWorkouts()
   }, [])
 
-  return { workouts, error, addWorkout, removeWorkout, updateWorkout }
+  return { workouts, error, loading, addWorkout, removeWorkout, updateWorkout }
 }
