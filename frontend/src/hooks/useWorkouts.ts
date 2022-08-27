@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { IWorkout } from "../types/workout";
 
 export const useWorkouts = () => {
@@ -8,16 +8,16 @@ export const useWorkouts = () => {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false);
 
-  const addWorkout = (workout: IWorkout) => {
-    // setWorkouts((prev) => [...prev, workout])
-  }
-  const removeWorkout = (id: string) => {
+  const addWorkout = useCallback((workout: IWorkout) => {
 
-  }
-  const updateWorkout = (workout: IWorkout) => {
+  }, [])
+  const removeWorkout = useCallback((id: string) => {
 
-  }
-  const loadWorkouts = async () => {
+  }, [])
+  const updateWorkout = useCallback((workout: IWorkout) => {
+
+  }, [])
+  const loadWorkouts = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(ENDPOINT)
@@ -30,7 +30,7 @@ export const useWorkouts = () => {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
   useEffect(() => {
     loadWorkouts()
