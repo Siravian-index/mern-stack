@@ -1,8 +1,10 @@
 import { useWorkoutContext } from "../context/WorkoutContext"
 
 const Home = () => {
-  const { error, loading } = useWorkoutContext()
+  const { error, loading, resource: workoutsList } = useWorkoutContext()
 
+
+  console.log(workoutsList);
 
   if (loading) {
     return <div>Loading...</div>

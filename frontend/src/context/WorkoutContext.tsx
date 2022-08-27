@@ -11,7 +11,7 @@ const Context = createContext({} as contextType)
 const { Provider } = Context
 
 const WorkoutContext = ({ children }: Props) => {
-  const ENDPOINT = '/api/workouts'
+  const ENDPOINT = 'http://localhost:4000/api/workouts'
   const workoutData = useResource<IWorkout>(ENDPOINT, 'workout')
   return (
     <Provider value={workoutData}>
