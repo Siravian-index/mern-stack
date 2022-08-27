@@ -1,25 +1,18 @@
 import React, { createContext, useContext } from "react"
-import { useWorkouts } from "../hooks/useWorkouts"
+import { useResource } from "../hooks/useResource"
 import { IWorkout } from "../types/workout"
 
 
-interface contextValue {
-  addWorkout: (workout: IWorkout) => void
-  removeWorkout: (id: string) => void
-  updateWorkout: (workout: IWorkout) => void
-  workouts: IWorkout[]
-  error: string
-  loading: boolean
-}
-
+type contextType = ReturnType<typeof useResource<IWorkout>>
 interface Props {
   children: React.ReactNode
 }
-const Context = createContext({} as contextValue)
+const Context = createContext({} as contextType)
 const { Provider } = Context
 
 const WorkoutContext = ({ children }: Props) => {
-  const workoutData = useWorkouts()
+  const ENDPOINT = 'api/workout/'
+  const workoutData = useResource<IWorkout>(ENDPOINT, 'workout')
   return (
     <Provider value={workoutData}>
       {children}
