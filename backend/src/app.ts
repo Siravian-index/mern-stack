@@ -10,7 +10,7 @@ const main = async () => {
   app.use(express.json())
 
   // custom routes
-  app.use('/api/workout', workoutRouter)
+  app.use('/api/workouts', workoutRouter)
 
   await connectToDB(app)
 }
