@@ -4,7 +4,7 @@ import Input from "./Input";
 
 
 const WorkoutForm = () => {
-  const { addItem, errorPost } = useWorkoutContext()
+  const { addItem, errorPost, } = useWorkoutContext()
   const [title, setTitle] = useState('')
   const [reps, setReps] = useState('');
   const [load, setLoad] = useState('');
@@ -23,6 +23,7 @@ const WorkoutForm = () => {
 
   return (
     <form className="create" onSubmit={handleSubmit}>
+      <h3>Add a New Workout</h3>
       <Input
         label="Title"
         setState={setTitle}
@@ -42,7 +43,7 @@ const WorkoutForm = () => {
       />
 
       <button>Add Workout</button>
-      {errorPost && <p>{errorPost}</p>}
+      {errorPost && <p className="error">{errorPost}</p>}
     </form>
   )
 }

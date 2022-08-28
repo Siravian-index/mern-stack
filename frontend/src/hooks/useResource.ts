@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
+import { IError } from '../types/responseError';
 
 export const useResource = <T>(endpoint: string, resourceName: string) => {
 
@@ -8,6 +9,7 @@ export const useResource = <T>(endpoint: string, resourceName: string) => {
   const [errorPost, setErrorPost] = useState('')
   const [loading, setLoading] = useState(false);
 
+  // CRUD operations
   const addItem = useCallback(async (item: T) => {
     try {
       const response = await fetch(endpoint, {
@@ -17,13 +19,18 @@ export const useResource = <T>(endpoint: string, resourceName: string) => {
         },
         body: JSON.stringify(item),
       })
-      if (response.ok) {
-        const json = await response.json() as T
-        setResource((prev) => [json, ...prev])
+      const json = await response.json() as T | IError
+      if (response.ok && json) {
+        const resource = json as T
+        setResource((prev) => [resource, ...prev])
         setErrorPost('')
+        return
       }
+      const { error } = json as IError
+      setErrorPost(error)
     } catch (error) {
       setErrorPost(`Something went wrong while posting ${resourceName}`)
+      console.error(error)
     }
   }, [])
   const removeItem = useCallback((id: string) => {
@@ -43,6 +50,7 @@ export const useResource = <T>(endpoint: string, resourceName: string) => {
       }
     } catch (error) {
       setError(`Something went wrong while fetching ${resourceName}`)
+      console.error(error)
     } finally {
       setLoading(false)
     }

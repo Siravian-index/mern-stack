@@ -3,9 +3,10 @@ interface Props {
   setState: React.Dispatch<React.SetStateAction<string>>
   label: string
   type?: 'text' | 'number'
+  className?: string
 }
 
-const Input = ({ value, setState, label, type = 'text' }: Props) => {
+const Input = ({ value, setState, label, type = 'text', className }: Props) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
@@ -13,12 +14,10 @@ const Input = ({ value, setState, label, type = 'text' }: Props) => {
   }
 
   return (
-    <div>
-      <label>
-        {label}
-        <input name={label} value={value} onChange={handleChange} type={type} />
-      </label>
-    </div>
+    <label>
+      {label}
+      <input name={label} value={value} onChange={handleChange} type={type} />
+    </label>
   )
 
 }
