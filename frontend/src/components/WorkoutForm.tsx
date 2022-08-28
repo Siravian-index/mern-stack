@@ -4,14 +4,21 @@ import Input from "./Input";
 
 
 const WorkoutForm = () => {
-  const { addItem } = useWorkoutContext()
+  const { addItem, errorPost } = useWorkoutContext()
   const [title, setTitle] = useState('')
   const [reps, setReps] = useState('');
   const [load, setLoad] = useState('');
 
+  const clearInputs = () => {
+    setTitle('')
+    setReps('')
+    setLoad('')
+  }
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     addItem({ title, reps: Number(reps), load: Number(load) })
+    clearInputs()
   }
 
   return (
@@ -35,6 +42,7 @@ const WorkoutForm = () => {
       />
 
       <button>Add Workout</button>
+      {errorPost && <p>{errorPost}</p>}
     </form>
   )
 }

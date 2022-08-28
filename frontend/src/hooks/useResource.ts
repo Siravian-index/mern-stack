@@ -3,24 +3,27 @@ import { useCallback, useEffect, useState } from "react"
 export const useResource = <T>(endpoint: string, resourceName: string) => {
 
   const [resource, setResource] = useState<T[]>([]);
+  // error GET
   const [error, setError] = useState('')
+  const [errorPost, setErrorPost] = useState('')
   const [loading, setLoading] = useState(false);
 
   const addItem = useCallback(async (item: T) => {
     try {
-      setLoading(true)
       const response = await fetch(endpoint, {
-        headers: {},
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify(item),
       })
       if (response.ok) {
         const json = await response.json() as T
-        setResource((prev) => [...prev, json])
+        setResource((prev) => [json, ...prev])
+        setErrorPost('')
       }
     } catch (error) {
-      setError(`Something went wrong while posting ${resourceName}`)
-    } finally {
-      setLoading(false)
+      setErrorPost(`Something went wrong while posting ${resourceName}`)
     }
   }, [])
   const removeItem = useCallback((id: string) => {
@@ -36,6 +39,7 @@ export const useResource = <T>(endpoint: string, resourceName: string) => {
       if (response.ok) {
         const json = await response.json() as T[]
         setResource(json)
+        setError('')
       }
     } catch (error) {
       setError(`Something went wrong while fetching ${resourceName}`)
@@ -48,5 +52,5 @@ export const useResource = <T>(endpoint: string, resourceName: string) => {
     loadResource()
   }, [])
 
-  return { resource, error, loading, addItem, removeItem, updateItem }
+  return { resource, error, loading, errorPost, addItem, removeItem, updateItem }
 }
