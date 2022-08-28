@@ -15,10 +15,11 @@ export const getAll = async (req: Request, res: Response) => {
 
 export const getById = async (req: Request, res: Response) => {
   const { id } = req.params
-  if (!isValidId(id)) {
-    throw new CustomError('Invalid id', 400)
-  }
+
   try {
+    if (!isValidId(id)) {
+      throw new CustomError('Invalid id', 400)
+    }
     const workout = await WorkoutModel.findById(id)
     if (!workout) {
       throw new CustomError('Workout not found', 404)
@@ -35,10 +36,10 @@ export const getById = async (req: Request, res: Response) => {
 
 export const createOne = async (req: Request<{}, {}, IWorkout>, res: Response) => {
   const { title, reps, load } = req.body
-  if (!(title && reps && load)) {
-    throw new CustomError('Missing required properties', 400)
-  }
   try {
+    if (!(title && reps && load)) {
+      throw new CustomError('Missing required properties', 400)
+    }
     const workout = await WorkoutModel.create({ title, reps, load })
     res.status(201).json(workout)
   } catch (error) {
@@ -47,7 +48,6 @@ export const createOne = async (req: Request<{}, {}, IWorkout>, res: Response) =
       return
     }
     res.status(500).json({ error: 'Server error' })
-
   }
 }
 
@@ -57,10 +57,11 @@ export const deleteAll = (req: Request, res: Response) => {
 
 export const deleteById = async (req: Request, res: Response) => {
   const { id } = req.params
-  if (!isValidId(id)) {
-    throw new CustomError('Invalid id', 400)
-  }
+
   try {
+    if (!isValidId(id)) {
+      throw new CustomError('Invalid id', 400)
+    }
     const workout = await WorkoutModel.findById(id)
     if (!workout) {
       throw new CustomError('Workout not found', 404)
@@ -80,11 +81,10 @@ export const editOne = async (req: Request, res: Response) => {
   const { id } = req.params
   const paramsToUpdate = req.body
 
-  if (!isValidId(id)) {
-    throw new CustomError('Invalid id', 400)
-  }
-
   try {
+    if (!isValidId(id)) {
+      throw new CustomError('Invalid id', 400)
+    }
     const workout = await WorkoutModel.findByIdAndUpdate(id, { ...paramsToUpdate }, { new: true })
     if (!workout) {
       throw new CustomError('Workout not found', 404)
