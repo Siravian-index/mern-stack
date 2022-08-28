@@ -1,4 +1,5 @@
 import WorkoutDetails from "../components/WorkoutDetails"
+import WorkoutForm from "../components/WorkoutForm"
 import { useWorkoutContext } from "../context/WorkoutContext"
 
 const Home = () => {
@@ -12,6 +13,7 @@ const Home = () => {
       <div className="workouts">
         {hasContent && content}
       </div>
+      <WorkoutForm />
     </div>
   )
 }
