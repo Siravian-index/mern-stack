@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { Errors } from "../error/errors"
+import CustomError from "../error/CustomError"
 import { WorkoutModel } from "../model/workout.model"
 import { IWorkout } from "../types"
 import { isValidId } from "../utils/validateId"
@@ -7,53 +7,73 @@ import { isValidId } from "../utils/validateId"
 export const getAll = async (req: Request, res: Response) => {
   try {
     const workouts = await WorkoutModel.find({}).sort({ createdAt: -1 })
-    return res.status(200).json(workouts)
+    res.status(200).json(workouts)
   } catch (error) {
-    return res.status(400).json({ error })
+    res.status(400).json({ error })
   }
 }
 
 export const getById = async (req: Request, res: Response) => {
   const { id } = req.params
-  if (!isValidId(id)) {
-    return res.status(400).json(Errors.notFound('Workout'))
-  }
+
   try {
+    if (!isValidId(id)) {
+      throw new CustomError('Invalid id', 400)
+    }
     const workout = await WorkoutModel.findById(id)
-    return res.status(200).json(workout)
+    if (!workout) {
+      throw new CustomError('Workout not found', 404)
+    }
+    res.status(200).json(workout)
   } catch (error) {
-    return res.status(400).json({ error })
+    if (error instanceof CustomError) {
+      res.status(error.code).json({ error: error.sendMessage() })
+      return
+    }
+    res.status(500).json({ error: 'Server error' })
   }
 }
 
 export const createOne = async (req: Request<{}, {}, IWorkout>, res: Response) => {
   const { title, reps, load } = req.body
   try {
+    if (!(title && reps && load)) {
+      throw new CustomError('Missing required properties', 400)
+    }
     const workout = await WorkoutModel.create({ title, reps, load })
-    return res.status(201).json(workout)
+    res.status(201).json(workout)
   } catch (error) {
-    return res.status(400).json({ error })
+    if (error instanceof CustomError) {
+      res.status(error.code).json({ error: error.sendMessage() })
+      return
+    }
+    res.status(500).json({ error: 'Server error' })
   }
 }
 
 export const deleteAll = (req: Request, res: Response) => {
-
+  // pending
 }
 
 export const deleteById = async (req: Request, res: Response) => {
   const { id } = req.params
-  if (!isValidId(id)) {
-    return res.status(400).json(Errors.notFound('Workout'))
-  }
+
   try {
+    if (!isValidId(id)) {
+      throw new CustomError('Invalid id', 400)
+    }
     const workout = await WorkoutModel.findById(id)
     if (!workout) {
-      return res.status(404).json(Errors.notFound(`Workout ${id}`))
+      throw new CustomError('Workout not found', 404)
     }
     await WorkoutModel.findByIdAndDelete(id)
-    return res.status(200).json(workout)
+    res.status(200).json(workout)
   } catch (error) {
-    return res.status(400).json({ error })
+    if (error instanceof CustomError) {
+      res.status(error.code).json({ error: error.sendMessage() })
+      return
+    }
+    res.status(500).json({ error: 'Server error' })
   }
 }
 
@@ -61,17 +81,20 @@ export const editOne = async (req: Request, res: Response) => {
   const { id } = req.params
   const paramsToUpdate = req.body
 
-  if (!isValidId(id)) {
-    return res.status(400).json(Errors.notFound('Workout'))
-  }
-
   try {
+    if (!isValidId(id)) {
+      throw new CustomError('Invalid id', 400)
+    }
     const workout = await WorkoutModel.findByIdAndUpdate(id, { ...paramsToUpdate }, { new: true })
     if (!workout) {
-      return res.status(404).json(Errors.notFound(`Workout ${id}`))
+      throw new CustomError('Workout not found', 404)
     }
-    return res.status(200).json(workout)
+    res.status(200).json(workout)
   } catch (error) {
-    return res.status(400).json({ error })
+    if (error instanceof CustomError) {
+      res.status(error.code).json({ error: error.sendMessage() })
+      return
+    }
+    res.status(500).json({ error: 'Server error' })
   }
 }

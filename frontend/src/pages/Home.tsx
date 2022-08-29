@@ -1,18 +1,13 @@
-import { useWorkoutContext } from "../context/WorkoutContext"
+import WorkoutForm from "../components/WorkoutForm"
+import WorkoutList from "../components/WorkoutList"
 
 const Home = () => {
-  const { error, loading } = useWorkoutContext()
-
-
-  if (loading) {
-    return <div>Loading...</div>
-  }
 
   return (
-    <>
-      <h3>Home</h3>
-      {error && <p>{error}</p>}
-    </>
+    <div className="home">
+      <WorkoutList />
+      <WorkoutForm />
+    </div>
   )
 }
 
