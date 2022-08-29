@@ -65,7 +65,7 @@ export const useResource = <T extends K>(endpoint: string, resourceName: string)
   const updateItem = useCallback(async (item: T) => {
     try {
       const response = await fetch(`${endpoint}${item.id}`, {
-        method: 'DELETE',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
