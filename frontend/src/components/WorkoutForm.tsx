@@ -15,10 +15,12 @@ const WorkoutForm = () => {
     setLoad('')
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    addItem({ title, reps: Number(reps), load: Number(load) })
-    clearInputs()
+    const success = await addItem({ title, reps: Number(reps), load: Number(load) })
+    if (success) {
+      clearInputs()
+    }
   }
 
   return (

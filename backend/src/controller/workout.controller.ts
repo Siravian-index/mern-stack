@@ -1,3 +1,4 @@
+import * as nUtils from '../utils/numberUtils';
 import { Request, Response } from "express"
 import CustomError from "../error/CustomError"
 import { WorkoutModel } from "../model/workout.model"
@@ -37,14 +38,14 @@ export const getById = async (req: Request, res: Response) => {
 export const createOne = async (req: Request<{}, {}, IWorkout>, res: Response) => {
   const { title, reps, load } = req.body
   try {
-    if (!(title && reps && load)) {
-      throw new CustomError('Missing required properties', 400)
+    if (!(title && nUtils.isPositive(load) && nUtils.isGreaterThan(reps, 4))) {
+      throw new CustomError('Missing required properties ', 400)
     }
     const workout = await WorkoutModel.create({ title, reps, load })
     res.status(201).json(workout)
   } catch (error) {
     if (error instanceof CustomError) {
-      res.status(error.code).json({ error: error.sendMessage() })
+      res.status(error.code).json({ error: error.message })
       return
     }
     res.status(500).json({ error: 'Server error' })

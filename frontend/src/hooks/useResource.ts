@@ -10,6 +10,8 @@ interface IError {
 }
 
 export const useResource = <T extends K>(endpoint: string, resourceName: string) => {
+  const SUCCESS = true
+  const FAILED = false
 
   const [resource, setResource] = useState<T[]>([]);
   // error GET
@@ -18,7 +20,7 @@ export const useResource = <T extends K>(endpoint: string, resourceName: string)
   const [loading, setLoading] = useState(false);
 
   // CRUD operations
-  const addItem = useCallback(async (item: T) => {
+  const addItem = useCallback(async (item: T): Promise<boolean> => {
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -32,7 +34,7 @@ export const useResource = <T extends K>(endpoint: string, resourceName: string)
         const resource = json as T
         setResource((prev) => [resource, ...prev])
         setErrorPost('')
-        return
+        return SUCCESS
       }
       const { error } = json as IError
       setErrorPost(error)
@@ -40,6 +42,7 @@ export const useResource = <T extends K>(endpoint: string, resourceName: string)
       setErrorPost(`Something went wrong while posting ${resourceName}`)
       console.error(error)
     }
+    return FAILED
   }, [])
   const removeItem = useCallback(async (id: string) => {
     try {
