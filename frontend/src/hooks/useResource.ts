@@ -1,7 +1,17 @@
 import { useCallback, useEffect, useState } from "react"
-import { IError } from '../types/responseError';
 
-export const useResource = <T>(endpoint: string, resourceName: string) => {
+// it ensures that T contains and id prop
+interface K {
+  id?: string
+}
+
+interface IError {
+  error: string
+}
+
+export const useResource = <T extends K>(endpoint: string, resourceName: string) => {
+  const SUCCESS = true
+  const FAILED = false
 
   const [resource, setResource] = useState<T[]>([]);
   // error GET
@@ -10,7 +20,7 @@ export const useResource = <T>(endpoint: string, resourceName: string) => {
   const [loading, setLoading] = useState(false);
 
   // CRUD operations
-  const addItem = useCallback(async (item: T) => {
+  const addItem = useCallback(async (item: T): Promise<boolean> => {
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -20,9 +30,31 @@ export const useResource = <T>(endpoint: string, resourceName: string) => {
         body: JSON.stringify(item),
       })
       const json = await response.json() as T | IError
-      if (response.ok && json) {
+      if (response.ok) {
         const resource = json as T
         setResource((prev) => [resource, ...prev])
+        setErrorPost('')
+        return SUCCESS
+      }
+      const { error } = json as IError
+      setErrorPost(error)
+    } catch (error) {
+      setErrorPost(`Something went wrong while posting ${resourceName}`)
+      console.error(error)
+    }
+    return FAILED
+  }, [])
+  const removeItem = useCallback(async (id: string) => {
+    try {
+      const response = await fetch(`${endpoint}${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+      const json = await response.json() as T | IError
+      if (response.ok) {
+        setResource((prev) => prev.filter((resource) => resource.id !== id))
         setErrorPost('')
         return
       }
@@ -33,11 +65,28 @@ export const useResource = <T>(endpoint: string, resourceName: string) => {
       console.error(error)
     }
   }, [])
-  const removeItem = useCallback((id: string) => {
-
-  }, [])
-  const updateItem = useCallback((item: T) => {
-
+  const updateItem = useCallback(async (item: T) => {
+    try {
+      const response = await fetch(`${endpoint}${item.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(item)
+      })
+      const json = await response.json() as T | IError
+      if (response.ok) {
+        const resourceUpdated = json as T
+        setResource((prev) => prev.map((resource) => resource.id === item.id ? resourceUpdated : resource))
+        setErrorPost('')
+        return
+      }
+      const { error } = json as IError
+      setErrorPost(error)
+    } catch (error) {
+      setErrorPost(`Something went wrong while posting ${resourceName}`)
+      console.error(error)
+    }
   }, [])
   const loadResource = useCallback(async () => {
     try {

@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import CustomError from "../error/CustomError"
 import { WorkoutModel } from "../model/workout.model"
 import { IWorkout } from "../types"
+import { isPositive } from "../utils/numberUtils"
 import { isValidId } from "../utils/validateId"
 
 export const getAll = async (req: Request, res: Response) => {
@@ -37,14 +38,25 @@ export const getById = async (req: Request, res: Response) => {
 export const createOne = async (req: Request<{}, {}, IWorkout>, res: Response) => {
   const { title, reps, load } = req.body
   try {
-    if (!(title && reps && load)) {
-      throw new CustomError('Missing required properties', 400)
+    if (!(title && isPositive(load) && isPositive(reps))) {
+      const emptyValues = []
+      if (!title) {
+        emptyValues.push('Title')
+      }
+      if (!isPositive(load)) {
+        emptyValues.push('Load')
+      }
+      if (!isPositive(reps)) {
+        emptyValues.push('Reps')
+      }
+      const missingProps = emptyValues.join(', ')
+      throw new CustomError(`Missing required values: ${missingProps}.`, 400)
     }
     const workout = await WorkoutModel.create({ title, reps, load })
     res.status(201).json(workout)
   } catch (error) {
     if (error instanceof CustomError) {
-      res.status(error.code).json({ error: error.sendMessage() })
+      res.status(error.code).json({ error: error.message })
       return
     }
     res.status(500).json({ error: 'Server error' })

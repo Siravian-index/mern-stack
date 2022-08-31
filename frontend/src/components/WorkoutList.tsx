@@ -12,7 +12,7 @@ const WorkoutList = () => {
   }
 
   if (error) {
-    return <p>{error}</p>
+    return <p className="error">{error}</p>
   }
 
   return (

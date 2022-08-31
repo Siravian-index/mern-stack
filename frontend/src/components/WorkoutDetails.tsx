@@ -1,17 +1,25 @@
+import { useWorkoutContext } from "../context/WorkoutContext"
 import { IWorkout } from "../types/workout"
+
+import { formatDistanceToNow } from 'date-fns'
 
 interface Props {
   workout: IWorkout
 }
 
 const WorkoutDetails = ({ workout }: Props) => {
-  const { load, reps, title, createdAt } = workout
+  const { removeItem } = useWorkoutContext()
+  const { load, reps, title, createdAt, id } = workout
+
+  const formattedDate = () => createdAt && formatDistanceToNow(new Date(createdAt), { addSuffix: true })
+
   return (
     <div className="workout-details">
       <h4>{title}</h4>
       <p><strong>Load (kg): </strong>{load}</p>
       <p><strong>Number of reps: </strong>{reps}</p>
-      <p>{createdAt}</p>
+      <p>{formattedDate()}</p>
+      {id && <span onClick={() => removeItem(id)}>X</span>}
     </div>
   )
 }
