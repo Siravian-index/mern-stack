@@ -36,14 +36,14 @@ export const getById = async (req: Request, res: Response) => {
 }
 
 export const createOne = async (req: Request<{}, {}, IWorkout>, res: Response) => {
-  const { title, reps, load } = req.body
+  const { title, load, reps } = req.body
   try {
-    if (!(title && isPositive(load) && isPositive(reps))) {
+    if (!(title && isPositive(load, true) && isPositive(reps))) {
       const emptyValues = []
       if (!title) {
         emptyValues.push('Title')
       }
-      if (!isPositive(load)) {
+      if (!isPositive(load, true)) {
         emptyValues.push('Load')
       }
       if (!isPositive(reps)) {
