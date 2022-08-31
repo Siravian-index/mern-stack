@@ -37,7 +37,7 @@ const WorkoutForm = () => {
         <input type='number' {...register("reps", { required: { value: true, message: 'This field is required' }, valueAsNumber: true, min: { value: 1, message: 'Should be a positive number' }, max: { value: 100, message: 'Max reps 100' } })} placeholder='Repetitions' />
       </label>
       {errors.reps && <p className="error">{errors.reps?.message}</p>}
-      {showButton && <button> Add Workout</button>}
+      {showButton && <button>Add Workout</button>}
       {errorPost && <p className="error">{errorPost}</p>}
     </form >
   )
