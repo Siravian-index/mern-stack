@@ -19,7 +19,7 @@ const WorkoutDetails = ({ workout }: Props) => {
       <p><strong>Load (kg): </strong>{load}</p>
       <p><strong>Number of reps: </strong>{reps}</p>
       <p>{formattedDate()}</p>
-      {id && <span onClick={() => removeItem(id)}>X</span>}
+      {id && <span className="material-symbols-outlined" onClick={() => removeItem(id)}>delete</span>}
     </div>
   )
 }
