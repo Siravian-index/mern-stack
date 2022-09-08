@@ -4,6 +4,7 @@ import express from 'express'
 import connectToDB from './db/config'
 
 import workoutRouter from './routes/workout.routes'
+import userRouter from './routes/user.routes'
 
 const main = async () => {
   const app = express()
@@ -13,6 +14,7 @@ const main = async () => {
 
   // custom routes
   app.use('/api/workouts', workoutRouter)
+  app.use('/api/user', userRouter)
 
   await connectToDB(app)
 }
