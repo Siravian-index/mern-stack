@@ -29,7 +29,7 @@ const WorkoutForm = () => {
       {errors.title && <p className="error">{errors.title?.message}</p>}
       <label>
         Load
-        <input type='number' {...register("load", { required: { value: true, message: 'This field is required' }, valueAsNumber: true, min: { value: 1, message: 'Should be a positive number' }, max: { value: 300, message: 'Should be less than 300' } })} placeholder='Weight' />
+        <input type='number' {...register("load", { required: { value: true, message: 'This field is required' }, valueAsNumber: true, min: { value: 0, message: 'Should be a positive number' }, max: { value: 300, message: 'Should be less than 300' } })} placeholder='Weight' />
       </label>
       {errors.load && <p className="error">{errors.load?.message}</p>}
       <label>
