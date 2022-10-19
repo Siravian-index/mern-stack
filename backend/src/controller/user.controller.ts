@@ -13,7 +13,7 @@ export const signUpUser = async (req: Request<{}, {}, { email: string, password:
     const user = await UserAccountModel.signup(email, password)
     res.status(200).json({ email, user })
   } catch (error) {
-    res.status(400).json({ error: 'Error while signing up' })
+    // @ts-ignore
+    res.status(400).json({ error: error.message })
   }
-  res.json({ msg: 'WIP' })
 }
