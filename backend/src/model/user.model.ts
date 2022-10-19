@@ -22,7 +22,7 @@ const userAccountSchema = new Schema({
       if (!validator.isEmail(email)) {
         throw new Error("Email is not valid");
       }
-      if (!validator.isStrongPassword(email)) {
+      if (!validator.isStrongPassword(password)) {
         throw new Error("Password is not strong enough");
       }
       const exist = await this.findOne({ email })

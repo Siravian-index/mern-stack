@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { UserAccountModel } from "../model/user.model"
-
+import { createToken } from "../utils/jsonUtils"
 
 
 export const loginUser = async (req: Request, res: Response) => {
@@ -11,7 +11,10 @@ export const signUpUser = async (req: Request<{}, {}, { email: string, password:
   const { email, password } = req.body
   try {
     const user = await UserAccountModel.signup(email, password)
-    res.status(200).json({ email, user })
+    console.log(user);
+    const token = createToken(user._id)
+
+    res.status(200).json({ email, token })
   } catch (error) {
     // @ts-ignore
     res.status(400).json({ error: error.message })
